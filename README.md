@@ -54,6 +54,7 @@ npm run build
 | 地下水观测 | `groundwater` | 地下水观测记录 | 记录编号、井点编号、观测日期 |
 | 蒸发观测 | `evaporation` | 蒸发观测记录 | 记录编号、站点编号、观测日期 |
 | 测流缆道 | `cableway` | 测流缆道 | 缆道编号、所属站点、跨度米数 |
+| 检修派工 | `dispatch` | 检修派工单 | 派工单号、管理单位、受托单位 |
 | 泥沙监测 | `sediment` | 泥沙监测记录 | 记录编号、站点编号、采样时间 |
 | 通讯系统 | `communication` | 通讯设备 | 设备编号、设备类型、所属站点 |
 | 站房维护 | `stationhouse` | 站房维护记录 | 记录编号、站点编号、维护类型 |
@@ -68,4 +69,7 @@ npm run build
 - 字段、状态、动作与流转目标集中在 `frontend/src/data/modules.ts`；示例数据在
   `frontend/src/data/seed.ts`。
 - 状态流转只允许在 `local-service.ts` 里改，页面组件不做业务判断。
+- 汛前派工（`dispatch`）是跨模块事务：审核派工一次提交会同时写派工单、站房受托任务、
+  巡检现场确认三处，任一写入失败三处全部回退，重复确认只保留一套；逻辑集中在
+  `frontend/src/api/dispatch-service.ts`，页面在 `frontend/src/views/dispatch/index.vue`。
 - 想回到初始数据：清掉浏览器里 `hydrology-monitor-station:entries` 这一项，或调用 `resetModule(模块)`。

@@ -13,6 +13,7 @@ const Warning = () => import('@/views/warning/index.vue')
 const Groundwater = () => import('@/views/groundwater/index.vue')
 const Evaporation = () => import('@/views/evaporation/index.vue')
 const Cableway = () => import('@/views/cableway/index.vue')
+const Dispatch = () => import('@/views/dispatch/index.vue')
 const Sediment = () => import('@/views/sediment/index.vue')
 const Communication = () => import('@/views/communication/index.vue')
 const Stationhouse = () => import('@/views/stationhouse/index.vue')
@@ -36,6 +37,7 @@ const router = createRouter({
     { path: '/groundwater', name: 'groundwater', component: Groundwater },
     { path: '/evaporation', name: 'evaporation', component: Evaporation },
     { path: '/cableway', name: 'cableway', component: Cableway },
+    { path: '/dispatch', name: 'dispatch', component: Dispatch },
     { path: '/sediment', name: 'sediment', component: Sediment },
     { path: '/communication', name: 'communication', component: Communication },
     { path: '/stationhouse', name: 'stationhouse', component: Stationhouse },
