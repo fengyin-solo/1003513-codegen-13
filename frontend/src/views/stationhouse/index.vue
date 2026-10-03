@@ -24,6 +24,40 @@
       </span>
     </p>
 
+    <section class="panel">
+      <h3>受托任务（由检修派工单提交生成）</h3>
+      <p class="panel-desc">
+        检修派工单审核提交后，按涉及站点逐站生成受托任务；派工单调整会同步重建，重复确认只保留一套。
+      </p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>记录编号</th>
+            <th>站点编号</th>
+            <th>维护内容</th>
+            <th>维护单位</th>
+            <th>维护日期</th>
+            <th>关联派工单</th>
+            <th>当前状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="task in entrustedTasks" :key="String(task.id)">
+            <td>{{ task.记录编号 }}</td>
+            <td>{{ task.站点编号 }}</td>
+            <td>{{ task.维护内容 }}</td>
+            <td>{{ task.维护单位 }}</td>
+            <td>{{ task.维护日期 }}</td>
+            <td>{{ task.关联派工单 }}</td>
+            <td>{{ task.status }}</td>
+          </tr>
+          <tr v-if="!entrustedTasks.length">
+            <td colspan="7" class="empty-state">暂无受托任务，等待检修派工单提交后生成</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <form class="filter-bar" @submit.prevent="reload">
       <label v-for="field in filterFields" :key="field" class="filter-item">
         <span>{{ field }}</span>
@@ -88,6 +122,7 @@ const statuses = ["待安排", "已安排", "施工中", "已完成", "已验收
 const stats = [{"label": "待维护项数", "value": 0}, {"label": "施工中项数", "value": 0}, {"label": "本月已验收", "value": 0}]
 
 const rows = ref<EntryRow[]>([])
+const entrustedTasks = ref<EntryRow[]>([])
 const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
@@ -128,6 +163,10 @@ function reload() {
     const payload = listEntries(meta.key, filters.value)
     rows.value = payload.items
     total.value = payload.total
+    // 受托任务不受筛选条件影响，始终展示派工单联动生成的完整清单
+    entrustedTasks.value = listEntries(meta.key).items.filter(
+      (row) => String(row['维护类型']) === '受托任务',
+    )
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '站房维护列表读取失败'
   }
